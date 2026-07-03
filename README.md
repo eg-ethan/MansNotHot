@@ -4,8 +4,8 @@ A double-clickable Windows terminal gag. Launch it and it:
 
 1. Starts the song from **0:00** in your default browser — Big Shaq,
    *Man's Not Hot*.
-2. Opens a fresh, styled (red-on-black) Command Prompt window that waits ~1.75s,
-   prints the "sauce" bar lyric as a quick burst (~7s), then drops the beat — a
+2. Opens a fresh, styled (red-on-black) Command Prompt window that waits ~5s,
+   prints the "sauce" bar lyric as a quick burst, then drops the beat — a
    very fast scroll of two long alternating lines for ~28s (≈ the 35s song
    window) — and settles at a live prompt.
 
@@ -33,8 +33,8 @@ to `mansnothot.bat` works fine too.
   window with `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`)
   is what leaves you at a live prompt at the end instead of slamming the window
   shut.
-- **Phase 1 (0s → ~7s): the lyric burst.** A 1.75s wait (so the video has time to
-  start), then the "sauce" bar delivered call → echo, verbatim:
+- **Phase 1: the lyric burst.** A 5s wait (so the video has time to start), then
+  the "sauce" bar delivered call → echo, verbatim:
 
   | Call | Echo |
   | --- | --- |

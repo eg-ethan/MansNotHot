@@ -19,10 +19,10 @@ color 0C
 cls
 
 rem === Phase 1: the "sauce" bar. Call -> echo, delivered as a quick burst. ====
-rem Wait 1.75s after the window opens before the first line, so the lyrics don't
+rem Wait 5s after the window opens before the first line, so the lyrics don't
 rem start until the video has begun playing. (192.0.2.1 is non-routable, so the
-rem ping just waits ~1750ms.) This lyric section runs ~7s in total.
-ping -n 1 -w 1750 192.0.2.1 >nul 2>&1
+rem ping just waits ~5000ms.)
+ping -n 1 -w 5000 192.0.2.1 >nul 2>&1
 echo The sauce
 ping -n 1 127.0.0.1 >nul
 echo flexin'
