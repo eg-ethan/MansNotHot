@@ -2,7 +2,8 @@
 
 A double-clickable Windows terminal gag. Launch it and it:
 
-1. Starts the song in the Spotify desktop app — Big Shaq, *Man's Not Hot*.
+1. Starts the song at **0:27 for 35 seconds** (0:27 → 1:02) — Big Shaq,
+   *Man's Not Hot*.
 2. Opens a fresh, styled Command Prompt window that prints the "sauce" bar
    lyric as a quick burst, then runs a short sequence of **real** system
    commands wearing jokey labels — pacing itself to run for roughly the length
@@ -23,17 +24,16 @@ to `mansnothot.bat` works fine too.
 
 | File | Role |
 | --- | --- |
-| `mansnothot.bat` | **Launcher.** Opens the song in the Spotify app, then spawns a new styled Command Prompt window running `banner.bat`. |
+| `mansnothot.bat` | **Launcher.** Starts the song (see *Playback* below), then spawns a new styled Command Prompt window running `banner.bat`. |
 | `banner.bat` | **The show.** The lyric burst + the paced real-command sequence, in that new window. |
 
 ## How it works
 
-- **Launcher** fires one `start "" "spotify:track:…"` (the Spotify URI launches
-  the app and plays the track), then opens a **new** window with
-  `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`) is what leaves
-  you at a live prompt at the end instead of slamming the window shut.
-- **Phase 1 (0s → ~7.5s):** the "sauce" bar, delivered call → echo, verbatim
-  (an opening burst — not lip-synced to the audio; see *Notes* below):
+- **Launcher** starts playback (see *Playback* below), then opens a **new**
+  window with `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`)
+  is what leaves you at a live prompt at the end instead of slamming the window
+  shut.
+- **Phase 1 (0s → ~7.5s):** the "sauce" bar, delivered call → echo, verbatim:
 
   | Call | Echo |
   | --- | --- |
@@ -60,29 +60,41 @@ Those `-n` values in `banner.bat` are the tuning knob: `systeminfo` and `wmic`
 runtimes vary by machine, so after one test run on your target you can nudge the
 `ping -n` numbers up or down to keep the sequence landing near the ~35s mark.
 
+## Playback — start at 0:27, play 35s
+
+The launcher tries three ways, in order, and uses the first that works:
+
+1. **Local file + VLC** — if a `mansnothot.<ext>` file (mp3/m4a/wav/flac/opus/ogg)
+   sits next to the script *and* VLC is installed, it plays headless with
+   `-I dummy --play-and-exit --start-time=27 --stop-time=62`. Exact 0:27 → 1:02
+   window, ad-free, auto-stops. **This is the only way to actually start at 0:27.**
+2. **Local file + ffplay** — same file, via ffmpeg's `ffplay -ss 27 -t 35 -autoexit
+   -nodisp`. Same exact window.
+3. **Spotify fallback** — if there's no local file or seeking player, it opens the
+   exact Spotify track `spotify:track:2Bwf6O9mGL8RvfM1UYYqQ0`. **This one starts at
+   0:00** — a `spotify:` URI has no seek/position support and can't be stopped from
+   batch, so the 0:27 start and 35s auto-stop don't apply on this path.
+
+To get the exact segment: drop your own copy of the song next to the script as
+`mansnothot.mp3` (or `.m4a`, etc.) and have [VLC](https://www.videolan.org/) or
+ffmpeg installed. (No audio file ships here — bring your own.)
+
 ## Requirements
 
-- Stock Windows 10 or 11. Nothing to install for the script itself.
-- The **Spotify desktop app** installed and signed in (that's the "player").
-  Guaranteed ad-free playback needs Spotify **Premium** — on the free tier
-  Spotify can still slip in the occasional audio ad.
+- Stock Windows 10 or 11.
+- For the **exact 0:27 → 1:02 window:** VLC or ffmpeg installed, plus a local
+  `mansnothot.<ext>` audio file beside the script. Otherwise it falls back to the
+  Spotify app (which must be installed + signed in) playing from 0:00.
 - **No** "Run as Administrator", **no** PowerShell, **no** execution-policy
   changes. Pure batch.
 
 ## Notes / not included
 
-- **Why Spotify, not YouTube.** YouTube-in-a-browser can throw a pre-roll ad,
-  and nothing in a plain `start` call can *guarantee* it won't — an ad shoves the
-  song (and the timing) back. The Spotify app plays the exact track directly, so
-  it's used instead. The old YouTube URL is kept as a comment in `mansnothot.bat`
-  if you'd rather switch back.
-- **Lyric sync.** The on-screen "sauce" burst is **not** lip-synced to the audio.
-  In the full Spotify track the sauce bar lands mid-song, and a `spotify:` URI
-  can't seek to a timestamp — so the terminal plays its ~35s bit over the song's
-  intro. (Lip-sync only worked with the specific YouTube upload that *opened* on
-  the sauce bar; keeping the ad off meant giving that up.)
-- **Second monitor.** Placing the app/player on a specific display isn't possible
-  in pure batch (it needs PowerShell/native window APIs, which the pure-batch
-  requirement rules out), so playback just lands wherever Spotify opens.
-- **Out of scope (v1):** cross-platform packaging, and local-file audio
-  integration.
+- **Why not just YouTube/Spotify for the exact segment?** YouTube-in-a-browser can
+  throw an unskippable pre-roll ad (nothing in a `start` call can guarantee
+  otherwise), and a `spotify:` URI can't seek to 0:27 or stop after 35s. A local
+  file through a seeking player is the only batch-only way to hit an exact window
+  ad-free — hence the order above.
+- **Second monitor.** Placing the player on a specific display isn't possible in
+  pure batch (needs PowerShell/native window APIs, ruled out here).
+- **Out of scope (v1):** cross-platform packaging.
