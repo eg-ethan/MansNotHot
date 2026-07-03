@@ -21,9 +21,9 @@ color 0A
 cls
 
 rem === Phase 1: the "sauce" bar. Call -> echo, delivered as a quick burst. ====
-rem With the local-file player the song starts at 0:27, so this burst lands over
-rem that part of the track. On the Spotify fallback the song plays from 0:00
-rem (the URI can't seek), so there the burst is just the gag's opening, unsynced.
+rem Not tightly lip-synced: the song opens in the browser at 0:27, but browser
+rem load (and any YouTube pre-roll ad) means we can't know the exact instant the
+rem audio starts, so treat this as the gag's opening burst over the track.
 echo The sauce
 ping -n 1 127.0.0.1 >nul
 echo flexin'
