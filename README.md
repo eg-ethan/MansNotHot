@@ -2,7 +2,7 @@
 
 A double-clickable Windows terminal gag. Launch it and it:
 
-1. Starts the song in your default browser — Big Shaq, *Man's Not Hot*.
+1. Starts the song in the Spotify desktop app — Big Shaq, *Man's Not Hot*.
 2. Opens a fresh, styled Command Prompt window that prints the "sauce" bar
    lyric as a quick burst, then runs a short sequence of **real** system
    commands wearing jokey labels — pacing itself to run for roughly the length
@@ -23,16 +23,17 @@ to `mansnothot.bat` works fine too.
 
 | File | Role |
 | --- | --- |
-| `mansnothot.bat` | **Launcher.** Opens the YouTube link, then spawns a new styled Command Prompt window running `banner.bat`. |
+| `mansnothot.bat` | **Launcher.** Opens the song in the Spotify app, then spawns a new styled Command Prompt window running `banner.bat`. |
 | `banner.bat` | **The show.** The lyric burst + the paced real-command sequence, in that new window. |
 
 ## How it works
 
-- **Launcher** makes exactly one network-touching call — `start "" "<youtube url>"` —
-  then opens a **new** window with `start "MAN'S NOT HOT" cmd /k "…banner.bat"`.
-  `cmd /k` (not `/c`) is what leaves you at a live prompt at the end instead of
-  slamming the window shut.
-- **Phase 1 (0s → ~7.5s):** the "sauce" bar, delivered call → echo, verbatim:
+- **Launcher** fires one `start "" "spotify:track:…"` (the Spotify URI launches
+  the app and plays the track), then opens a **new** window with
+  `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`) is what leaves
+  you at a live prompt at the end instead of slamming the window shut.
+- **Phase 1 (0s → ~7.5s):** the "sauce" bar, delivered call → echo, verbatim
+  (an opening burst — not lip-synced to the audio; see *Notes* below):
 
   | Call | Echo |
   | --- | --- |
@@ -61,20 +62,27 @@ runtimes vary by machine, so after one test run on your target you can nudge the
 
 ## Requirements
 
-- Stock Windows 10 or 11. Nothing to install.
+- Stock Windows 10 or 11. Nothing to install for the script itself.
+- The **Spotify desktop app** installed and signed in (that's the "player").
+  Guaranteed ad-free playback needs Spotify **Premium** — on the free tier
+  Spotify can still slip in the occasional audio ad.
 - **No** "Run as Administrator", **no** PowerShell, **no** execution-policy
   changes. Pure batch.
 
 ## Notes / not included
 
-- **Second monitor.** Placing the browser on a specific display isn't possible
+- **Why Spotify, not YouTube.** YouTube-in-a-browser can throw a pre-roll ad,
+  and nothing in a plain `start` call can *guarantee* it won't — an ad shoves the
+  song (and the timing) back. The Spotify app plays the exact track directly, so
+  it's used instead. The old YouTube URL is kept as a comment in `mansnothot.bat`
+  if you'd rather switch back.
+- **Lyric sync.** The on-screen "sauce" burst is **not** lip-synced to the audio.
+  In the full Spotify track the sauce bar lands mid-song, and a `spotify:` URI
+  can't seek to a timestamp — so the terminal plays its ~35s bit over the song's
+  intro. (Lip-sync only worked with the specific YouTube upload that *opened* on
+  the sauce bar; keeping the ad off meant giving that up.)
+- **Second monitor.** Placing the app/player on a specific display isn't possible
   in pure batch (it needs PowerShell/native window APIs, which the pure-batch
-  requirement rules out), so the song just opens in the default browser on
-  whatever display it lands on.
-- **Lyric sync.** The "sauce" bar hits ~0.25s into the video, so `banner.bat`
-  holds a quarter second (`ping -n 1 -w 250 192.0.2.1`) before the first line so
-  "The sauce" lands with the audio. This assumes the show window opens as
-  playback actually starts — browser spin-up is the one lag pure batch can't
-  measure, so on a slow-to-launch browser the burst may still lead the audio.
-- **Out of scope (v1):** cross-platform packaging, and any Spotify/local-file
-  audio integration — YouTube in the browser is the "player."
+  requirement rules out), so playback just lands wherever Spotify opens.
+- **Out of scope (v1):** cross-platform packaging, and local-file audio
+  integration.
