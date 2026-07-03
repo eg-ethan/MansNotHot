@@ -13,8 +13,8 @@ rem  Pure batch: no PowerShell, no admin, no installs, no local files. The only
 rem  network touch is the single start call that opens the video.
 rem ===========================================================================
 
-rem --- Start the song from 0:00 in the default browser. -----------------------
-start "" "https://www.youtube.com/watch?v=avYhvAZxgQc"
+rem --- Start the song from 0:00 in the default browser (explicit &t=0s seek). --
+start "" "https://www.youtube.com/watch?v=avYhvAZxgQc&t=0s"
 
 rem --- Ad-free alternative via the Spotify app (plays a different master, also
 rem     from 0:00). To use it, comment out the YouTube line above and uncomment

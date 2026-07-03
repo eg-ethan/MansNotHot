@@ -4,10 +4,10 @@ A double-clickable Windows terminal gag. Launch it and it:
 
 1. Starts the song from **0:00** in your default browser — Big Shaq,
    *Man's Not Hot*.
-2. Opens a fresh, styled Command Prompt window that waits ~1.5s, prints the
-   "sauce" bar lyric as a quick burst (~7s), then drops the beat — a fast scroll
-   of two alternating lines for ~28s (≈ the 35s song window) — and settles at a
-   live prompt.
+2. Opens a fresh, styled (red-on-black) Command Prompt window that waits ~1.75s,
+   prints the "sauce" bar lyric as a quick burst (~7s), then drops the beat — a
+   very fast scroll of two long alternating lines for ~28s (≈ the 35s song
+   window) — and settles at a live prompt.
 
 A from-scratch Windows analog of the macOS/Linux `mansnothot.sh` gag — not a
 port.
@@ -33,7 +33,7 @@ to `mansnothot.bat` works fine too.
   window with `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`)
   is what leaves you at a live prompt at the end instead of slamming the window
   shut.
-- **Phase 1 (0s → ~7s): the lyric burst.** A 1.5s wait (so the video has time to
+- **Phase 1 (0s → ~7s): the lyric burst.** A 1.75s wait (so the video has time to
   start), then the "sauce" bar delivered call → echo, verbatim:
 
   | Call | Echo |
@@ -44,10 +44,9 @@ to `mansnothot.bat` works fine too.
   | Raw sauce | ah |
   | Yo, boom, ah | — |
 
-- **Phase 2 (~7s → ~35s): the beat drops.** A fast scroll of two alternating
-  beatbox lines (`skrrrahh  pap  pap  ka-ka-ka` /
-  `skidiki-pap-pap  and-a-pu-pu-pudrrrr-boom`) for **28 seconds**, then a live
-  prompt. 7s + 28s ≈ the 35s song window.
+- **Phase 2 (~7s → ~35s): the beat drops.** A very fast scroll of two long
+  alternating beatbox lines for **28 seconds**, then a live prompt. 7s + 28s ≈
+  the 35s song window.
 
 ### Timing
 
@@ -59,15 +58,15 @@ The **beat finale is bounded by the wall clock, not a line count**, so it runs a
 true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`:
 
 - **Duration:** the `2800` in the loop is centiseconds — `2800` = 28.00s.
-- **Speed:** it pings every 3rd line with `-w 10`. Fewer pings / lower `-w` =
-  faster scroll; more pings / higher `-w` = slower.
+- **Speed:** it pings only every 30th line (`geq 30`) — ~10× faster than the
+  earlier every-3rd-line pace. More pings (lower number) = slower; fewer = faster.
 
 ## Playback
 
 The launcher opens the song from 0:00 in your default browser:
 
 ```
-start "" "https://www.youtube.com/watch?v=avYhvAZxgQc"
+start "" "https://www.youtube.com/watch?v=avYhvAZxgQc&t=0s"
 ```
 
 YouTube may show a pre-roll ad; nothing in a `start` call can stop that (it's

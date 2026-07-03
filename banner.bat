@@ -12,17 +12,17 @@ rem
 rem  Timing note: ping -n 1 is an instant beat; ping -n N (N>1) waits ~N-1s.
 rem ===========================================================================
 
-rem --- Style the window: custom title + green-on-black. Plain, no ASCII art. --
+rem --- Style the window: custom title + red-on-black. Plain, no ASCII art. ----
 title MAN'S NOT HOT
 mode con: cols=100 lines=30 >nul 2>&1
-color 0A
+color 0C
 cls
 
 rem === Phase 1: the "sauce" bar. Call -> echo, delivered as a quick burst. ====
-rem Wait 1.5s after the window opens before the first line, so the lyrics don't
+rem Wait 1.75s after the window opens before the first line, so the lyrics don't
 rem start until the video has begun playing. (192.0.2.1 is non-routable, so the
-rem ping just waits ~1500ms.) This lyric section runs ~7s in total.
-ping -n 1 -w 1500 192.0.2.1 >nul 2>&1
+rem ping just waits ~1750ms.) This lyric section runs ~7s in total.
+ping -n 1 -w 1750 192.0.2.1 >nul 2>&1
 echo The sauce
 ping -n 1 127.0.0.1 >nul
 echo flexin'
@@ -43,13 +43,13 @@ echo Yo, boom, ah
 ping -n 1 127.0.0.1 >nul
 
 rem === Phase 2: the beat drops -- fast scroll for exactly ~28 seconds. ========
-rem Two alternating lines at ~3x the earlier speed (pings every 3rd line instead
-rem of every line, with a shorter wait). The run length is bounded by the WALL
-rem CLOCK, not a line count, so it lasts 28s on any machine no matter how fast it
-rem scrolls.
+rem Two long alternating lines blasted very fast (pings only every 30th line, so
+rem ~10x faster than the earlier every-3rd-line pace). The run length is bounded
+rem by the WALL CLOCK, not a line count, so it lasts 28s on any machine no matter
+rem how fast it scrolls.
 rem   Duration knob: the 2800 below is centiseconds (2800 = 28.00s).
-rem   Speed knob: ping every Nth line / the -w value -- fewer pings + lower -w
-rem               = faster scroll; more pings + higher -w = slower.
+rem   Speed knob: how often it pings (the "geq 30" below) + the -w value --
+rem               fewer pings + lower -w = faster scroll; more pings = slower.
 echo(
 setlocal EnableDelayedExpansion
 call :now _t0
@@ -57,14 +57,14 @@ set "flip=0"
 set "tick=0"
 :beat_loop
 if "!flip!"=="0" (
-    echo skrrrahh  pap  pap  ka-ka-ka
+    echo skrrrahh-pap-pap-ka-ka-ka  skibiki-pap-pap-and-a-pu-pu-pudrrrr-boom  skya  du-du-ku-ku-dun-dun
     set "flip=1"
 ) else (
-    echo skidiki-pap-pap  and-a-pu-pu-pudrrrr-boom
+    echo poom-poom  BOOM  skrrrahhhh  ka-ka-ka-ka  brap-brap-brrra  man's-not-hot  the-ting-goes-SKRRRAHH
     set "flip=0"
 )
 set /a "tick+=1"
-if !tick! geq 3 (
+if !tick! geq 30 (
     ping -n 1 -w 10 192.0.2.1 >nul 2>&1
     set "tick=0"
     call :now _tn
