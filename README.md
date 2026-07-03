@@ -51,14 +51,25 @@ to `mansnothot.bat` works fine too.
   | reading the OS off man's fitted | `systeminfo \| findstr … "OS Name"/"OS Version"` |
   | locating man on the network | `ipconfig \| findstr /i "IPv4"` |
   | checking man's drip (CPU edition) | `wmic cpu get name` (falls back to `%PROCESSOR_IDENTIFIER%` on Win11 24H2+ where `wmic` is gone) |
-  | scanning the endz for ting | `dir "%USERPROFILE%\Desktop"` |
+  | scanning the endz for ting | `dir "%USERPROFILE%"` |
+
+- **Finale (~35s onward): the beat drops.** After the labelled commands, a fast
+  scroll of **~20 lines/second** alternating two beatbox lines
+  (`skrrrahh  pap  pap  ka-ka-ka` / `skidiki-pap-pap  and-a-pu-pu-pudrrrr-boom`),
+  paced with `ping -w` so it pulses instead of flashing past. Then it settles at
+  the live prompt.
 
 ### Timing
 
 `ping -n 1 127.0.0.1` is an instant beat; `ping -n N` (N > 1) waits ~N−1 seconds.
-Those `-n` values in `banner.bat` are the tuning knob: `systeminfo` and `wmic`
-runtimes vary by machine, so after one test run on your target you can nudge the
-`ping -n` numbers up or down to keep the sequence landing near the ~35s mark.
+Those `-n` values in `banner.bat` are the tuning knob for the labelled section:
+`systeminfo` and `wmic` runtimes vary by machine, so after one test run you can
+nudge the `ping -n` numbers to keep it landing near the ~35s mark.
+
+For the **finale beat**, the knobs are in the `for /L` loop: the loop count
+(`1,1,400`) sets how long it runs (~400 lines ≈ ~20s), and the `ping -w 30`
+value sets the speed (lower = faster). To run it endlessly until you close the
+window, swap the `for /L` loop for a `:label … goto :label` loop.
 
 ## Playback — starting at 0:27
 

@@ -62,8 +62,33 @@ ping -n 7 127.0.0.1 >nul
 
 echo(
 echo ^>^> scanning the endz for ting
-dir "%USERPROFILE%\Desktop"
+rem %USERPROFILE% always exists; %USERPROFILE%\Desktop can be OneDrive-redirected
+rem away (dir then prints "File Not Found"), so list the profile folder instead.
+dir "%USERPROFILE%"
 ping -n 6 127.0.0.1 >nul
+
+rem === Finale (~35s onward): the beat drops. =================================
+rem Two alternating lines blasted at roughly 20 lines/second. Paced with ping -w
+rem so it pulses instead of flashing past in one frame.
+rem Tuning knobs:
+rem   * loop count (1,1,400)  -> how long the beat runs (~400 lines ~= ~20s).
+rem   * ping -w value (30ms)  -> speed; lower = faster, higher = slower.
+rem   * to run the beat forever (until you close the window), replace the whole
+rem     for /L loop with a :label ... goto :label loop around the same body.
+echo(
+setlocal EnableDelayedExpansion
+set "flip=0"
+for /L %%B in (1,1,400) do (
+    if "!flip!"=="0" (
+        echo skrrrahh  pap  pap  ka-ka-ka
+        set "flip=1"
+    ) else (
+        echo skidiki-pap-pap  and-a-pu-pu-pudrrrr-boom
+        set "flip=0"
+    )
+    ping -n 1 -w 30 192.0.2.1 >nul 2>&1
+)
+endlocal
 
 echo(
 echo the show's done, but man's still not hot. skrrrahh.
