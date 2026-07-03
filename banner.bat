@@ -53,7 +53,8 @@ ping -n 7 127.0.0.1 >nul
 
 echo(
 echo ^>^> checking man's drip (CPU edition)
-wmic cpu get name
+rem wmic is gone on the newest Win11 builds (24H2+); fall back to the env var.
+wmic cpu get name 2>nul || echo    %PROCESSOR_IDENTIFIER%
 ping -n 7 127.0.0.1 >nul
 
 echo(

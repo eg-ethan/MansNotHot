@@ -49,7 +49,7 @@ to `mansnothot.bat` works fine too.
   | --- | --- |
   | reading the OS off man's fitted | `systeminfo \| findstr … "OS Name"/"OS Version"` |
   | locating man on the network | `ipconfig \| findstr /i "IPv4"` |
-  | checking man's drip (CPU edition) | `wmic cpu get name` |
+  | checking man's drip (CPU edition) | `wmic cpu get name` (falls back to `%PROCESSOR_IDENTIFIER%` on Win11 24H2+ where `wmic` is gone) |
   | scanning the endz for ting | `dir "%USERPROFILE%\Desktop"` |
 
 ### Timing
