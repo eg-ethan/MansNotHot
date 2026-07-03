@@ -21,6 +21,11 @@ color 0A
 cls
 
 rem === Phase 1: the "sauce" bar. Call -> echo, delivered as a quick burst. ====
+rem "sauce" hits ~0.25s into the video, so hold a quarter second before the first
+rem line lands -- lines the burst up with the audio (assumes this window opened
+rem as playback started; browser spin-up is the one lag batch can't measure).
+rem 192.0.2.1 is a non-routable TEST-NET address, so this ping just waits ~250ms.
+ping -n 1 -w 250 192.0.2.1 >nul 2>&1
 echo The sauce
 ping -n 1 127.0.0.1 >nul
 echo flexin'

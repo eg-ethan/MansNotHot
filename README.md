@@ -71,9 +71,10 @@ runtimes vary by machine, so after one test run on your target you can nudge the
   in pure batch (it needs PowerShell/native window APIs, which the pure-batch
   requirement rules out), so the song just opens in the default browser on
   whatever display it lands on.
-- **Lyric sync.** The show window currently opens immediately after the video.
-  If you want the on-screen lyric burst to line up precisely with the audio, we
-  need the timestamp of where the "sauce" bar hits in this specific upload — then
-  a matching `timeout` before the window opens will line them up.
+- **Lyric sync.** The "sauce" bar hits ~0.25s into the video, so `banner.bat`
+  holds a quarter second (`ping -n 1 -w 250 192.0.2.1`) before the first line so
+  "The sauce" lands with the audio. This assumes the show window opens as
+  playback actually starts — browser spin-up is the one lag pure batch can't
+  measure, so on a slow-to-launch browser the burst may still lead the audio.
 - **Out of scope (v1):** cross-platform packaging, and any Spotify/local-file
   audio integration — YouTube in the browser is the "player."
