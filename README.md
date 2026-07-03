@@ -2,12 +2,12 @@
 
 A double-clickable Windows terminal gag. Launch it and it:
 
-1. Starts the song at **0:27** in your default browser — Big Shaq,
+1. Starts the song from **0:00** in your default browser — Big Shaq,
    *Man's Not Hot*.
-2. Opens a fresh, styled Command Prompt window that prints the "sauce" bar
-   lyric as a quick burst, then runs a short sequence of **real** system
-   commands wearing jokey labels — pacing itself to run for roughly the length
-   of the song (~35s) and settling at a live prompt at the end.
+2. Opens a fresh, styled Command Prompt window that waits ~1.5s, prints the
+   "sauce" bar lyric as a quick burst (~7s), then drops the beat — a fast scroll
+   of two alternating lines for ~28s (≈ the 35s song window) — and settles at a
+   live prompt.
 
 A from-scratch Windows analog of the macOS/Linux `mansnothot.sh` gag — not a
 port.
@@ -25,7 +25,7 @@ to `mansnothot.bat` works fine too.
 | File | Role |
 | --- | --- |
 | `mansnothot.bat` | **Launcher.** Starts the song (see *Playback* below), then spawns a new styled Command Prompt window running `banner.bat`. |
-| `banner.bat` | **The show.** The lyric burst + the paced real-command sequence, in that new window. |
+| `banner.bat` | **The show.** The lyric burst + the ~28s beat finale, in that new window. |
 
 ## How it works
 
@@ -33,7 +33,8 @@ to `mansnothot.bat` works fine too.
   window with `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`)
   is what leaves you at a live prompt at the end instead of slamming the window
   shut.
-- **Phase 1 (0s → ~7.5s):** the "sauce" bar, delivered call → echo, verbatim:
+- **Phase 1 (0s → ~7s): the lyric burst.** A 1.5s wait (so the video has time to
+  start), then the "sauce" bar delivered call → echo, verbatim:
 
   | Call | Echo |
   | --- | --- |
@@ -43,64 +44,41 @@ to `mansnothot.bat` works fine too.
   | Raw sauce | ah |
   | Yo, boom, ah | — |
 
-- **Phase 2 (~7.5s → ~35s):** real commands, each under a jokey label, paced
-  with `ping` so output stays steady rather than bursting then idling:
-
-  | Label | Real command |
-  | --- | --- |
-  | reading the OS off man's fitted | `systeminfo \| findstr … "OS Name"/"OS Version"` |
-  | locating man on the network | `ipconfig \| findstr /i "IPv4"` |
-  | checking man's drip (CPU edition) | `wmic cpu get name` (falls back to `%PROCESSOR_IDENTIFIER%` on Win11 24H2+ where `wmic` is gone) |
-  | scanning the endz for ting | `dir "%USERPROFILE%"` |
-
-- **Finale (~35s onward): the beat drops.** After the labelled commands, a fast
-  scroll of **~20 lines/second** alternating two beatbox lines
-  (`skrrrahh  pap  pap  ka-ka-ka` / `skidiki-pap-pap  and-a-pu-pu-pudrrrr-boom`),
-  paced with `ping -w` so it pulses instead of flashing past. Then it settles at
-  the live prompt.
+- **Phase 2 (~7s → ~35s): the beat drops.** A fast scroll of two alternating
+  beatbox lines (`skrrrahh  pap  pap  ka-ka-ka` /
+  `skidiki-pap-pap  and-a-pu-pu-pudrrrr-boom`) for **28 seconds**, then a live
+  prompt. 7s + 28s ≈ the 35s song window.
 
 ### Timing
 
-`ping -n 1 127.0.0.1` is an instant beat; `ping -n N` (N > 1) waits ~N−1 seconds.
-Those `-n` values in `banner.bat` are the tuning knob for the labelled section:
-`systeminfo` and `wmic` runtimes vary by machine, so after one test run you can
-nudge the `ping -n` numbers to keep it landing near the ~35s mark.
+The lyric burst uses `ping` as a metronome: `ping -n 1 127.0.0.1` is an instant
+beat, `ping -n N` (N > 1) waits ~N−1 seconds, and the leading `ping -n 1 -w 1500`
+is the 1.5s pre-roll before the first line.
 
-For the **finale beat**, the knobs are in the `for /L` loop: the loop count
-(`1,1,400`) sets how long it runs (~400 lines ≈ ~20s), and the `ping -w 30`
-value sets the speed (lower = faster). To run it endlessly until you close the
-window, swap the `for /L` loop for a `:label … goto :label` loop.
+The **beat finale is bounded by the wall clock, not a line count**, so it runs a
+true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`:
 
-## Playback — starting at 0:27
+- **Duration:** the `2800` in the loop is centiseconds — `2800` = 28.00s.
+- **Speed:** it pings every 3rd line with `-w 10`. Fewer pings / lower `-w` =
+  faster scroll; more pings / higher `-w` = slower.
 
-The launcher opens the song at 0:27 in your default browser:
+## Playback
+
+The launcher opens the song from 0:00 in your default browser:
 
 ```
-start "" "https://www.youtube.com/watch?v=3M_5oYU-IsU&t=27s"
+start "" "https://www.youtube.com/watch?v=avYhvAZxgQc"
 ```
 
-YouTube's `&t=27s` seeks to 0:27 and autoplays — the only way to start at an
-exact timestamp with **no installs and no local audio file**.
+YouTube may show a pre-roll ad; nothing in a `start` call can stop that (it's
+only ad-free on YouTube **Premium** or with an ad-blocking browser/DNS).
 
-**The trade-offs (forced by "no installs, no local file"):**
-
-- **Ads.** YouTube may show a pre-roll ad. Nothing in a `start` call can stop
-  that — it's only fully ad-free on YouTube **Premium** or with an ad-blocking
-  browser/DNS. (This is the cost of needing an exact 0:27 start with zero setup;
-  the ad-free option — Spotify — can't seek to 0:27 at all.)
-- **No auto-stop at 1:02.** A YouTube watch page can't be told to stop after 35s,
-  so the clip keeps playing after the ~35s show ends. Just close the tab.
-
-**Ad-free alternative (from 0:00).** If you'd rather have guaranteed no-ad
-playback and can live without the 0:27 start, `mansnothot.bat` has a commented
-line to use the Spotify app instead:
+**Ad-free alternative.** `mansnothot.bat` has a commented line to use the Spotify
+app instead (a different master, also from 0:00):
 
 ```
 start "" "spotify:track:2Bwf6O9mGL8RvfM1UYYqQ0"
 ```
-
-A `spotify:` URI always starts at 0:00 (no seek), so this can't hit 0:27 — it's
-purely the ad-free-vs-exact-timestamp trade.
 
 ## Requirements
 
