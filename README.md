@@ -52,8 +52,11 @@ to `mansnothot.bat` works fine too.
 ### Timing
 
 The lyric burst uses `ping` as a metronome: `ping -n 1 127.0.0.1` is an instant
-beat, `ping -n N` (N > 1) waits ~N−1 seconds, and the leading `ping -n 1 -w 5000`
-(line 25 of `banner.bat`) is the 5s pre-roll before the first line.
+beat, `ping -n N` (N > 1) waits ~N−1 seconds. The ~5s pre-roll before the first
+lyric is split in two: the launcher's `timeout /t 3` (which also lets the media
+player settle so the terminal opens in front of it) plus `banner.bat`'s leading
+`ping -n 1 -w 2000`. There's also a `ping -n 1 -w 500` mid-bar that gives the
+second half of the "sauce" line (Raw sauce onward) an extra 500 ms.
 
 The **beat finale is bounded by the wall clock, not a line count**, so it runs a
 true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`:

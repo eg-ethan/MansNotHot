@@ -26,9 +26,16 @@ if defined AUDIO (
     start "" "https://www.youtube.com/watch?v=avYhvAZxgQc&t=0s"
 )
 
-rem --- Open a NEW Command Prompt window and run the show. cmd /k (not /c) keeps
-rem     it open at a live prompt after the sequence finishes. Doubled quotes keep
-rem     it working even if the folder path contains spaces. --------------------
+rem --- Let the media player fully open, start playing, and settle its window
+rem     FIRST, so the terminal we open next lands IN FRONT of it instead of
+rem     behind it. If the player still ends up on top on your machine, raise the
+rem     3 here (and trim banner.bat's pre-lyric wait to match, to keep ~5s total
+rem     from song start to the first lyric). --------------------------------------
+timeout /t 3 /nobreak >nul 2>&1
+
+rem --- Open a NEW Command Prompt window LAST, so it's the foreground window.
+rem     cmd /k (not /c) keeps it open at a live prompt after the sequence
+rem     finishes. Doubled quotes survive spaces in the folder path. -------------
 start "MAN'S NOT HOT" cmd /k ""%~dp0banner.bat""
 
 rem Launcher's job is done; it exits without touching any pre-existing shell.

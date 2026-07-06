@@ -19,10 +19,10 @@ color 0C
 cls
 
 rem === Phase 1: the "sauce" bar. Call -> echo, delivered as a quick burst. ====
-rem Wait 5s after the window opens before the first line, so the lyrics don't
-rem start until the video has begun playing. (192.0.2.1 is non-routable, so the
-rem ping just waits ~5000ms.)
-ping -n 1 -w 5000 192.0.2.1 >nul 2>&1
+rem Wait ~2s here before the first line. The launcher already waited ~3s for the
+rem player to open, so that's ~5s total from song start to the first lyric. (Tune
+rem this to shift the lyrics; 192.0.2.1 is non-routable, so it just waits ~2000ms.)
+ping -n 1 -w 2000 192.0.2.1 >nul 2>&1
 echo The sauce
 ping -n 1 127.0.0.1 >nul
 echo flexin'
@@ -35,6 +35,9 @@ echo Just sauce
 ping -n 1 127.0.0.1 >nul
 echo saucy
 ping -n 2 127.0.0.1 >nul
+rem +500ms of extra space before the second half of the bar (Raw sauce onward)
+rem so it lines up with the song.
+ping -n 1 -w 500 192.0.2.1 >nul 2>&1
 echo Raw sauce
 ping -n 1 127.0.0.1 >nul
 echo ah
