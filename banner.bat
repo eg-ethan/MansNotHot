@@ -48,9 +48,9 @@ ping -n 1 -w 680 192.0.2.1 >nul 2>&1
 echo ah
 ping -n 1 -w 670 192.0.2.1 >nul 2>&1
 echo Yo, boom, ah
-rem Final gap before the beat: 1210 from the mp3 onsets, +600 measured on the
-rem target machine (the beat ran ~300ms early there, plus the 300ms knob shift).
-ping -n 1 -w 1810 192.0.2.1 >nul 2>&1
+rem Final gap before the beat: 1210 from the mp3 onsets, +900 calibrated on the
+rem target machine (raise if the beat scroll starts early, lower if late).
+ping -n 1 -w 2110 192.0.2.1 >nul 2>&1
 
 rem === Phase 2: the beat drops -- fast scroll for exactly ~28 seconds. ========
 rem Two long alternating lines blasted very fast (pings only every 30th line, so
