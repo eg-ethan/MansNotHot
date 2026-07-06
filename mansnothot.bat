@@ -1,25 +1,30 @@
 @echo off
+setlocal EnableExtensions
 rem ===========================================================================
 rem  MAN'S NOT HOT -- Windows Edition  ::  launcher
 rem
 rem  Double-click this file. That's the whole interface.
-rem    1. Opens the song in your default browser (Big Shaq -- Man's Not Hot),
-rem       playing from 0:00.
+rem    1. Plays the song from 0:00. Preferred: an .mp3 sitting in THIS folder,
+rem       opened in the default media player (no installs, no browser, no ad).
+rem       If there's no .mp3 next to the script, it falls back to the video in
+rem       your default browser.
 rem    2. Opens a NEW, styled Command Prompt window that runs the show
-rem       (banner.bat): a 1.5s beat before the lyrics, the lyric burst, the
-rem       labelled real commands, then the fast beat finale, then a live prompt.
+rem       (banner.bat): a pause, the lyric burst, then the fast beat finale,
+rem       then a live prompt.
 rem
-rem  Pure batch: no PowerShell, no admin, no installs, no local files. The only
-rem  network touch is the single start call that opens the video.
+rem  Pure batch: no PowerShell, no admin, no installs.
 rem ===========================================================================
 
-rem --- Start the song from 0:00 in the default browser (explicit &t=0s seek). --
-start "" "https://www.youtube.com/watch?v=avYhvAZxgQc&t=0s"
+rem --- Look for an .mp3 next to this script (first one wins). -----------------
+set "AUDIO="
+for %%F in ("%~dp0*.mp3") do if not defined AUDIO set "AUDIO=%%~fF"
 
-rem --- Ad-free alternative via the Spotify app (plays a different master, also
-rem     from 0:00). To use it, comment out the YouTube line above and uncomment
-rem     this one:
-rem start "" "spotify:track:2Bwf6O9mGL8RvfM1UYYqQ0"
+rem --- Play it in the default player, or fall back to the browser video. ------
+if defined AUDIO (
+    start "" "%AUDIO%"
+) else (
+    start "" "https://www.youtube.com/watch?v=avYhvAZxgQc&t=0s"
+)
 
 rem --- Open a NEW Command Prompt window and run the show. cmd /k (not /c) keeps
 rem     it open at a live prompt after the sequence finishes. Doubled quotes keep

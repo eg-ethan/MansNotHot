@@ -2,8 +2,8 @@
 
 A double-clickable Windows terminal gag. Launch it and it:
 
-1. Starts the song from **0:00** in your default browser — Big Shaq,
-   *Man's Not Hot*.
+1. Plays the bundled **`mansnothot.mp3`** from 0:00 in your default media player
+   — no browser, no ad. (Falls back to the YouTube video if the mp3 is missing.)
 2. Opens a fresh, styled (red-on-black) Command Prompt window that waits ~5s,
    prints the "sauce" bar lyric as a quick burst, then drops the beat — a
    very fast scroll of two long alternating lines for ~28s (≈ the 35s song
@@ -26,6 +26,7 @@ to `mansnothot.bat` works fine too.
 | --- | --- |
 | `mansnothot.bat` | **Launcher.** Starts the song (see *Playback* below), then spawns a new styled Command Prompt window running `banner.bat`. |
 | `banner.bat` | **The show.** The lyric burst + the ~28s beat finale, in that new window. |
+| `mansnothot.mp3` | **The song** (~35s clip). Played from 0:00 by the launcher. |
 
 ## How it works
 
@@ -33,8 +34,8 @@ to `mansnothot.bat` works fine too.
   window with `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`)
   is what leaves you at a live prompt at the end instead of slamming the window
   shut.
-- **Phase 1: the lyric burst.** A 5s wait (so the video has time to start), then
-  the "sauce" bar delivered call → echo, verbatim:
+- **Phase 1: the lyric burst.** A 5s wait (so the song has started), then the
+  "sauce" bar delivered call → echo, verbatim:
 
   | Call | Echo |
   | --- | --- |
@@ -51,8 +52,8 @@ to `mansnothot.bat` works fine too.
 ### Timing
 
 The lyric burst uses `ping` as a metronome: `ping -n 1 127.0.0.1` is an instant
-beat, `ping -n N` (N > 1) waits ~N−1 seconds, and the leading `ping -n 1 -w 1500`
-is the 1.5s pre-roll before the first line.
+beat, `ping -n N` (N > 1) waits ~N−1 seconds, and the leading `ping -n 1 -w 5000`
+(line 25 of `banner.bat`) is the 5s pre-roll before the first line.
 
 The **beat finale is bounded by the wall clock, not a line count**, so it runs a
 true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`:
@@ -63,27 +64,23 @@ true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`
 
 ## Playback
 
-The launcher opens the song from 0:00 in your default browser:
+The launcher looks for the **first `.mp3` next to it** and plays it in the
+default media player from 0:00 — no browser, no ad:
 
 ```
-start "" "https://www.youtube.com/watch?v=avYhvAZxgQc&t=0s"
+for %%F in ("%~dp0*.mp3") do if not defined AUDIO set "AUDIO=%%~fF"
+if defined AUDIO ( start "" "%AUDIO%" ) else ( start "" "https://www.youtube.com/watch?v=avYhvAZxgQc&t=0s" )
 ```
 
-YouTube may show a pre-roll ad; nothing in a `start` call can stop that (it's
-only ad-free on YouTube **Premium** or with an ad-blocking browser/DNS).
-
-**Ad-free alternative.** `mansnothot.bat` has a commented line to use the Spotify
-app instead (a different master, also from 0:00):
-
-```
-start "" "spotify:track:2Bwf6O9mGL8RvfM1UYYqQ0"
-```
+`mansnothot.mp3` ships in the repo, so out of the box it plays that. Drop in a
+different `.mp3` (or rename yours) and it'll play instead. If there's no `.mp3`
+in the folder at all, it falls back to the YouTube video in your browser.
 
 ## Requirements
 
 - Stock Windows 10 or 11. Nothing to install.
-- A default browser (for the YouTube path) or the Spotify app (for the commented
-  alternative).
+- A default app for `.mp3` (any stock Windows media player), or a browser for the
+  YouTube fallback.
 - **No** "Run as Administrator", **no** PowerShell, **no** execution-policy
   changes. Pure batch.
 
