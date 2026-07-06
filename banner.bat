@@ -22,7 +22,7 @@ rem === Phase 1: the "sauce" bar. Call -> echo, delivered as a quick burst. ====
 rem Wait ~2s here before the first line. The launcher already waited ~3s for the
 rem player to open, so that's ~5s total from song start to the first lyric. (Tune
 rem this to shift the lyrics; 192.0.2.1 is non-routable, so it just waits ~2000ms.)
-ping -n 1 -w 2000 192.0.2.1 >nul 2>&1
+ping -n 1 -w 500 192.0.2.1 >nul 2>&1
 echo The sauce
 ping -n 1 127.0.0.1 >nul
 echo flexin'
