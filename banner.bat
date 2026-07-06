@@ -61,18 +61,21 @@ rem   Duration knob: the 2800 below is centiseconds (2800 = 28.00s).
 rem   Speed knob: how often it pings (the "geq 90" below) + the -w value --
 rem               fewer pings + lower -w = faster scroll; more pings = slower.
 echo(
+rem Perceived-speed tricks: the 6 variants sweep right then back left (zig-zag
+rem indent wave) with mixed lengths and case, so the scroll strobes with lateral
+rem motion instead of reading as a static two-line wall.
 setlocal EnableDelayedExpansion
 call :now _t0
-set "flip=0"
+set "v=0"
 set "tick=0"
 :beat_loop
-if "!flip!"=="0" (
-    echo skrrrahh-pap-pap-ka-ka-ka  skibiki-pap-pap-and-a-pu-pu-pudrrrr-boom  skya  du-du-ku-ku-dun-dun
-    set "flip=1"
-) else (
-    echo poom-poom  BOOM  skrrrahhhh  ka-ka-ka-ka  brap-brap-brrra  man's-not-hot  the-ting-goes-SKRRRAHH
-    set "flip=0"
-)
+if !v!==0 echo skrrrahh-pap-pap-ka-ka-ka  skibiki-pap-pap  and-a-pu-pu-pudrrrr-boom  skya  du-du-ku-ku-dun-dun
+if !v!==1 echo       poom-poom  BOOM  skrrrahhhh  ka-ka-ka-ka  brap-brap-brrra
+if !v!==2 echo             THE-TING-GOES-SKRRRAHH  PAP-PAP-KA-KA-KA  BOOM
+if !v!==3 echo                   skya  du-du-ku-ku-dun-dun  poom-poom  PUDRRRR
+if !v!==4 echo             man's-not-hot  NEVER-hot  SKRRRAHH  brap-brap-brrra
+if !v!==5 echo       skidiki-pap-pap  and-a-pu-pu-pudrrrr-BOOM  ka-ka-ka-ka
+set /a "v=(v+1) %% 6"
 set /a "tick+=1"
 if !tick! geq 90 (
     ping -n 1 -w 10 192.0.2.1 >nul 2>&1

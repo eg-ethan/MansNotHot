@@ -45,9 +45,11 @@ to `mansnothot.bat` works fine too.
   | Raw sauce | ah |
   | Yo, boom, ah | — |
 
-- **Phase 2 (~7s → ~35s): the beat drops.** A very fast scroll of two long
-  alternating beatbox lines for **28 seconds**, then a live prompt. 7s + 28s ≈
-  the 35s song window.
+- **Phase 2 (~7.3s → ~35s): the beat drops.** A flat-out scroll of six beatbox
+  line variants for **28 seconds** — the variants zig-zag their indentation
+  (sweeping right, then back left) with mixed lengths and case, which reads as
+  far faster and more chaotic than a fixed two-line wall — then a live prompt.
+  7.3s + 28s ≈ the 35s clip.
 
 ### Timing
 
