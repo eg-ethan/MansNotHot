@@ -3,13 +3,14 @@ rem ===========================================================================
 rem  banner.bat  ::  the "show"
 rem  Runs inside the new window the launcher opens (via cmd /k).
 rem
-rem  Phase 1  (0s -> ~7s):   the "sauce" bar lyric burst -- call/echo pairs,
-rem                          verbatim from Big Shaq's Man's Not Hot.
-rem  Phase 2  (~7s -> ~35s): the beat drops -- a fast scroll of two alternating
+rem  Phase 1  (0s -> ~7.3s): the "sauce" bar lyric burst -- call/echo pairs,
+rem                          verbatim, each line timed to the vocal onsets
+rem                          measured from the bundled mansnothot.mp3.
+rem  Phase 2  (~7.3s -> ~35s): the beat drops -- a fast scroll of two alternating
 rem                          lines for ~28 seconds, then a live prompt.
-rem                          7s + 28s ~= the 35s song window.
+rem                          7.3s + 28s ~= the 35.1s clip.
 rem
-rem  Timing note: ping -n 1 is an instant beat; ping -n N (N>1) waits ~N-1s.
+rem  Timing note: ping -n 1 -w <ms> 192.0.2.1 (non-routable) waits ~<ms> ms.
 rem ===========================================================================
 
 rem --- Style the window: custom title + red-on-black. Plain, no ASCII art. ----
@@ -18,32 +19,37 @@ mode con: cols=100 lines=30 >nul 2>&1
 color 0C
 cls
 
-rem === Phase 1: the "sauce" bar. Call -> echo, delivered as a quick burst. ====
-rem Wait ~2s here before the first line. The launcher already waited ~3s for the
-rem player to open, so that's ~5s total from song start to the first lyric. (Tune
-rem this to shift the lyrics; 192.0.2.1 is non-routable, so it just waits ~2000ms.)
-ping -n 1 -w 500 192.0.2.1 >nul 2>&1
+rem === Phase 1: the "sauce" bar, timed to the bundled mp3. =====================
+rem Vocal onsets measured from mansnothot.mp3 (audio-relative seconds):
+rem   0.00 The sauce   1.09 flexin'    1.81 No ketchup   2.52 none
+rem   3.23 Just sauce  3.92 saucy      4.65 Raw sauce    5.36 ah
+rem   6.06 Yo, boom, ah    ~7.3 the beat drops
+rem The -w gaps below are those onsets minus ~30ms each for ping-spawn overhead.
+rem
+rem THE ONE SYNC KNOB is the first -w (3500): it covers the time your media
+rem player takes to launch and start playing. 3500 carries over your by-ear
+rem calibration from the old flow (3s launcher wait + your 500ms here). After a
+rem test run, if the printed lyrics run AHEAD of the audio, raise it; if they
+rem LAG behind, lower it.
+ping -n 1 -w 3500 192.0.2.1 >nul 2>&1
 echo The sauce
-ping -n 1 127.0.0.1 >nul
+ping -n 1 -w 1060 192.0.2.1 >nul 2>&1
 echo flexin'
-ping -n 2 127.0.0.1 >nul
+ping -n 1 -w 690 192.0.2.1 >nul 2>&1
 echo No ketchup
-ping -n 1 127.0.0.1 >nul
+ping -n 1 -w 680 192.0.2.1 >nul 2>&1
 echo none
-ping -n 2 127.0.0.1 >nul
+ping -n 1 -w 680 192.0.2.1 >nul 2>&1
 echo Just sauce
-ping -n 1 127.0.0.1 >nul
+ping -n 1 -w 660 192.0.2.1 >nul 2>&1
 echo saucy
-ping -n 2 127.0.0.1 >nul
-rem +500ms of extra space before the second half of the bar (Raw sauce onward)
-rem so it lines up with the song.
-ping -n 1 -w 500 192.0.2.1 >nul 2>&1
+ping -n 1 -w 700 192.0.2.1 >nul 2>&1
 echo Raw sauce
-ping -n 1 127.0.0.1 >nul
+ping -n 1 -w 680 192.0.2.1 >nul 2>&1
 echo ah
-ping -n 2 127.0.0.1 >nul
+ping -n 1 -w 670 192.0.2.1 >nul 2>&1
 echo Yo, boom, ah
-ping -n 1 127.0.0.1 >nul
+ping -n 1 -w 1210 192.0.2.1 >nul 2>&1
 
 rem === Phase 2: the beat drops -- fast scroll for exactly ~28 seconds. ========
 rem Two long alternating lines blasted very fast (pings only every 30th line, so

@@ -4,10 +4,10 @@ A double-clickable Windows terminal gag. Launch it and it:
 
 1. Plays the bundled **`mansnothot.mp3`** from 0:00 in your default media player
    — no browser, no ad. (Falls back to the YouTube video if the mp3 is missing.)
-2. Opens a fresh, styled (red-on-black) Command Prompt window that waits ~5s,
-   prints the "sauce" bar lyric as a quick burst, then drops the beat — a
-   very fast scroll of two long alternating lines for ~28s (≈ the 35s song
-   window) — and settles at a live prompt.
+2. Opens a fresh, styled (red-on-black) Command Prompt window that prints the
+   "sauce" bar lyric line-by-line in time with the audio, then drops the beat —
+   a very fast scroll of two long alternating lines for ~28s (≈ the 35s clip) —
+   and settles at a live prompt.
 
 A from-scratch Windows analog of the macOS/Linux `mansnothot.sh` gag — not a
 port.
@@ -34,8 +34,8 @@ to `mansnothot.bat` works fine too.
   window with `start "MAN'S NOT HOT" cmd /k "…banner.bat"`. `cmd /k` (not `/c`)
   is what leaves you at a live prompt at the end instead of slamming the window
   shut.
-- **Phase 1: the lyric burst.** A 5s wait (so the song has started), then the
-  "sauce" bar delivered call → echo, verbatim:
+- **Phase 1: the lyric burst.** A short wait (the sync knob — see *Timing*),
+  then the "sauce" bar delivered call → echo, verbatim:
 
   | Call | Echo |
   | --- | --- |
@@ -51,12 +51,28 @@ to `mansnothot.bat` works fine too.
 
 ### Timing
 
-The lyric burst uses `ping` as a metronome: `ping -n 1 127.0.0.1` is an instant
-beat, `ping -n N` (N > 1) waits ~N−1 seconds. The ~5s pre-roll before the first
-lyric is split in two: the launcher's `timeout /t 3` (which also lets the media
-player settle so the terminal opens in front of it) plus `banner.bat`'s leading
-`ping -n 1 -w 2000`. There's also a `ping -n 1 -w 500` mid-bar that gives the
-second half of the "sauce" line (Raw sauce onward) an extra 500 ms.
+The lyric lines are timed to **vocal onsets measured from `mansnothot.mp3`
+itself** (waveform analysis of the clip):
+
+| Time in clip | Line |
+| --- | --- |
+| 0.00s | The sauce |
+| 1.09s | flexin' |
+| 1.81s | No ketchup |
+| 2.52s | none |
+| 3.23s | Just sauce |
+| 3.92s | saucy |
+| 4.65s | Raw sauce |
+| 5.36s | ah |
+| 6.06s | Yo, boom, ah |
+| ~7.3s | *the beat drops* |
+
+Each `ping -n 1 -w <ms> 192.0.2.1` in `banner.bat` reproduces those gaps (minus
+~30ms apiece for ping-spawn overhead). **The one sync knob** is the first `-w`
+(default `3500`, carried over from the by-ear calibration of the previous
+version): it absorbs however long your media player takes to launch and start
+playing. If the printed lyrics run ahead of the audio, raise it; if they lag,
+lower it.
 
 The **beat finale is bounded by the wall clock, not a line count**, so it runs a
 true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`:
@@ -89,6 +105,11 @@ in the folder at all, it falls back to the YouTube video in your browser.
 
 ## Notes / not included
 
-- **Second monitor.** Placing the browser on a specific display isn't possible in
+- **Terminal stays in front.** The launcher writes a 5-line VBScript to `%TEMP%`
+  and runs it with stock `wscript.exe` (built into every Windows 10/11 — no
+  install, no PowerShell, no execution policy). For ~6 seconds it re-activates
+  the "MAN'S NOT HOT" window every 250ms, so the media player opening underneath
+  can't end up on top of the show.
+- **Second monitor.** Placing the player on a specific display isn't possible in
   pure batch (needs PowerShell/native window APIs, ruled out here).
 - **Out of scope (v1):** cross-platform packaging.
