@@ -1,0 +1,18 @@
+# Windows cruft
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editor / OS junk
+*.swp
+*~
+.DS_Store
+
+# Build / distribution output
+*.zip
+dist/
+
+# Shortcuts and temp scripts generated at runtime
+*.lnk
+mnh-focus.vbs
