@@ -26,12 +26,11 @@ rem   3.23 Just sauce  3.92 saucy      4.65 Raw sauce    5.36 ah
 rem   6.06 Yo, boom, ah    ~7.3 the beat drops
 rem The -w gaps below are those onsets minus ~30ms each for ping-spawn overhead.
 rem
-rem THE ONE SYNC KNOB is the first -w (3500): it covers the time your media
-rem player takes to launch and start playing. 3500 carries over your by-ear
-rem calibration from the old flow (3s launcher wait + your 500ms here). After a
-rem test run, if the printed lyrics run AHEAD of the audio, raise it; if they
-rem LAG behind, lower it.
-ping -n 1 -w 3500 192.0.2.1 >nul 2>&1
+rem THE ONE SYNC KNOB is the first -w (1500): it covers the time your media
+rem player takes to launch and start playing. (3500 measured ~2s late on the
+rem target machine, so it's now 1500.) If the printed lyrics run AHEAD of the
+rem audio, raise it; if they LAG behind, lower it.
+ping -n 1 -w 1500 192.0.2.1 >nul 2>&1
 echo The sauce
 ping -n 1 -w 1060 192.0.2.1 >nul 2>&1
 echo flexin'

@@ -69,10 +69,9 @@ itself** (waveform analysis of the clip):
 
 Each `ping -n 1 -w <ms> 192.0.2.1` in `banner.bat` reproduces those gaps (minus
 ~30ms apiece for ping-spawn overhead). **The one sync knob** is the first `-w`
-(default `3500`, carried over from the by-ear calibration of the previous
-version): it absorbs however long your media player takes to launch and start
-playing. If the printed lyrics run ahead of the audio, raise it; if they lag,
-lower it.
+(currently `1500`, calibrated on the target machine): it absorbs however long
+your media player takes to launch and start playing. If the printed lyrics run
+ahead of the audio, raise it; if they lag, lower it.
 
 The **beat finale is bounded by the wall clock, not a line count**, so it runs a
 true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`:
