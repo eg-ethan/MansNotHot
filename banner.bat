@@ -53,12 +53,12 @@ rem target machine (raise if the beat scroll starts early, lower if late).
 ping -n 1 -w 2110 192.0.2.1 >nul 2>&1
 
 rem === Phase 2: the beat drops -- fast scroll for exactly ~28 seconds. ========
-rem Two long alternating lines blasted very fast (pings only every 30th line, so
-rem ~10x faster than the earlier every-3rd-line pace). The run length is bounded
+rem Two long alternating lines blasted flat-out (pings only every 90th line, so
+rem the scroll runs near the console's max render speed). The run length is bounded
 rem by the WALL CLOCK, not a line count, so it lasts 28s on any machine no matter
 rem how fast it scrolls.
 rem   Duration knob: the 2800 below is centiseconds (2800 = 28.00s).
-rem   Speed knob: how often it pings (the "geq 30" below) + the -w value --
+rem   Speed knob: how often it pings (the "geq 90" below) + the -w value --
 rem               fewer pings + lower -w = faster scroll; more pings = slower.
 echo(
 setlocal EnableDelayedExpansion
@@ -74,7 +74,7 @@ if "!flip!"=="0" (
     set "flip=0"
 )
 set /a "tick+=1"
-if !tick! geq 30 (
+if !tick! geq 90 (
     ping -n 1 -w 10 192.0.2.1 >nul 2>&1
     set "tick=0"
     call :now _tn

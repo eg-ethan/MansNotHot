@@ -77,8 +77,9 @@ The **beat finale is bounded by the wall clock, not a line count**, so it runs a
 true 28 seconds on any machine regardless of scroll speed. Knobs in `banner.bat`:
 
 - **Duration:** the `2800` in the loop is centiseconds — `2800` = 28.00s.
-- **Speed:** it pings only every 30th line (`geq 30`) — ~10× faster than the
-  earlier every-3rd-line pace. More pings (lower number) = slower; fewer = faster.
+- **Speed:** it pings only every 90th line (`geq 90`), so the scroll runs near
+  the console's max render speed. More pings (lower number) = slower; fewer =
+  faster.
 
 ## Playback
 
